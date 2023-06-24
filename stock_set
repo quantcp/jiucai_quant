@@ -1,0 +1,16 @@
+#多个股票数据的组合
+stock_set=['000413','000063','002007','000001','000002']
+import pandas as pd
+import warnings 
+warnings.filterwarnings('ignore')
+import tushare as ts
+df=ts.get_k_data('000413',autype='hfq',start='20210201',end='20230201')
+p0=df[['date','close']]
+p0.set_index('date',inplace=True)
+for i in stock_set[1:]:
+    df=ts.get_k_data(i,autype='hfq',start='20210201',end='20230201')
+    p=df[['date','close']]
+    p.set_index('date',inplace=True)
+    p0=pd.concat([p0,p],axis=1)
+
+p0.columns=stock_set
